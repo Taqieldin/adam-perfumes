@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Dependencies
 node_modules/
 npm-debug.log*
@@ -155,3 +156,7 @@ firestore-debug.log
 # Temporary files
 tmp/
 temp/
+=======
+node_modules/
+.env
+>>>>>>> 879364218bad8c8cf6d973d2460486de644059f8
