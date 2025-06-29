@@ -1,0 +1,141 @@
+{
+  "expo": {
+    "name": "Adam Perfumes Admin",
+    "slug": "adam-perfumes-admin",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/admin-icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/admin-splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1e293b"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.adamperfumes.admin",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to scan product barcodes and take inventory photos.",
+        "NSLocationWhenInUseUsageDescription": "This app uses location to manage store-specific inventory and orders.",
+        "NSMicrophoneUsageDescription": "This app uses the microphone for voice notes and customer support calls.",
+        "NSPhotoLibraryUsageDescription": "This app accesses your photo library to upload product images and promotional content.",
+        "NSFaceIDUsageDescription": "This app uses Face ID for secure admin authentication.",
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLName": "adam-perfumes-admin",
+            "CFBundleURLSchemes": ["adam-perfumes-admin", "com.adamperfumes.admin"]
+          }
+        ]
+      },
+      "associatedDomains": [
+        "applinks:admin.adam-perfumes.com"
+      ]
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/admin-adaptive-icon.png",
+        "backgroundColor": "#1e293b"
+      },
+      "package": "com.adamperfumes.admin",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "USE_FINGERPRINT",
+        "USE_BIOMETRIC",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "admin.adam-perfumes.com"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
+    },
+    "web": {
+      "favicon": "./assets/images/admin-favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/admin-notification-icon.png",
+          "color": "#1e293b",
+          "sounds": [
+            "./assets/sounds/admin-notification.wav"
+          ]
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Adam Perfumes Admin to access your camera to scan barcodes and take inventory photos."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Adam Perfumes Admin to use your location for store management."
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow Adam Perfumes Admin to use Face ID for secure authentication."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Adam Perfumes Admin to access your photos to upload product images.",
+          "cameraPermission": "Allow Adam Perfumes Admin to access your camera to take photos."
+        }
+      ],
+      [
+        "@react-native-firebase/app",
+        {
+          "android": {
+            "googleServicesFile": "./google-services.json"
+          },
+          "ios": {
+            "googleServicesPlist": "./GoogleService-Info.plist"
+          }
+        }
+      ]
+    ],
+    "scheme": "adam-perfumes-admin",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "your-admin-eas-project-id"
+      }
+    },
+    "owner": "adam-perfumes-team",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/your-admin-eas-project-id"
+    }
+  }
+}

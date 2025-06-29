@@ -1,0 +1,78 @@
+{
+  "walletBalance": "رصيد المحفظة",
+  "topUp": "إعادة الشحن",
+  "settings": "الإعدادات",
+  "topUpWallet": "شحن المحفظة",
+  "amount": "المبلغ",
+  "paymentMethod": "طريقة الدفع",
+  "creditCard": "بطاقة ائتمان",
+  "applePay": "آبل باي",
+  "googlePay": "جوجل باي",
+  "bankTransfer": "تحويل بنكي",
+  "cancel": "إلغاء",
+  "recentTransactions": "المعاملات الأخيرة",
+  "noTransactions": "لا توجد معاملات بعد",
+  "balance": "الرصيد",
+  "sendMoney": "إرسال أموال",
+  "sendMoneyDescription": "تحويل الأموال للأصدقاء والعائلة",
+  "payBills": "دفع الفواتير",
+  "payBillsDescription": "ادفع فوا��يرك مباشرة من المحفظة",
+  "autoTopUp": "الشحن التلقائي",
+  "autoTopUpDescription": "إضافة أموال تلقائياً عند انخفاض الرصيد",
+  "success": {
+    "topUpCompleted": "تم شحن المحفظة بنجاح!",
+    "transferCompleted": "تم تحويل الأموال بنجاح!",
+    "settingsUpdated": "تم تحديث الإعدادات بنجاح!"
+  },
+  "error": {
+    "fetchFailed": "فشل في تحميل بيانات المحفظة",
+    "invalidAmount": "يرجى إدخال مبلغ صحيح",
+    "topUpFailed": "فشل في شحن المحفظة",
+    "transferFailed": "فشل في تحويل الأموال",
+    "insufficientBalance": "رصيد المحفظة غير كافي"
+  },
+  "transaction": {
+    "types": {
+      "top_up": "شحن المحفظة",
+      "purchase": "شراء",
+      "refund": "استرداد",
+      "transfer_sent": "أموال مرسلة",
+      "transfer_received": "أموال مستلمة",
+      "gift_card": "بطاقة هدية",
+      "loyalty_points": "نقاط الولاء",
+      "admin_adjustment": "تعديل إداري"
+    },
+    "status": {
+      "pending": "قيد الانتظار",
+      "completed": "مكتمل",
+      "failed": "فا��ل",
+      "cancelled": "ملغي"
+    }
+  },
+  "settings": {
+    "title": "إعدادات المحفظة",
+    "autoTopUp": {
+      "title": "الشحن التلقائي",
+      "description": "إضافة أموال تلقائياً عند انخفاض الرصيد تحت الحد المحدد",
+      "enabled": "تفعيل الشحن التلقائي",
+      "threshold": "الشحن عند انخفاض الرصيد تحت",
+      "amount": "مبلغ الشحن"
+    },
+    "limits": {
+      "title": "حدود الإنفاق",
+      "daily": "الحد اليومي للإنفاق",
+      "monthly": "الحد الشهري للإنفاق"
+    },
+    "notifications": {
+      "title": "الإشعارات",
+      "enabled": "تفعيل إشعارات المحفظة",
+      "lowBalance": "تنبيهات الرصيد المنخفض",
+      "threshold": "التنبيه عند انخفاض الرصيد تحت"
+    },
+    "security": {
+      "title": "الأمان",
+      "requirePin": "طلب رقم سري للمعاملات",
+      "biometric": "استخدام المصادقة البيومترية"
+    }
+  }
+}

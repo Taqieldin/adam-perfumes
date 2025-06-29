@@ -1,0 +1,148 @@
+{
+  "expo": {
+    "name": "Adam Perfumes",
+    "slug": "adam-perfumes",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ec4899"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.adamperfumes.customer",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to scan QR codes and take photos for product reviews.",
+        "NSLocationWhenInUseUsageDescription": "This app uses location to show nearby stores and calculate delivery times.",
+        "NSMicrophoneUsageDescription": "This app uses the microphone for voice messages in customer support.",
+        "NSPhotoLibraryUsageDescription": "This app accesses your photo library to upload product images and profile pictures.",
+        "NSFaceIDUsageDescription": "This app uses Face ID for secure authentication.",
+        "NSContactsUsageDescription": "This app accesses contacts to help you share products with friends.",
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLName": "adam-perfumes",
+            "CFBundleURLSchemes": ["adam-perfumes", "com.adamperfumes.customer"]
+          }
+        ]
+      },
+      "associatedDomains": [
+        "applinks:adam-perfumes.com",
+        "applinks:www.adam-perfumes.com"
+      ]
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ec4899"
+      },
+      "package": "com.adamperfumes.customer",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "USE_FINGERPRINT",
+        "USE_BIOMETRIC",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED",
+        "READ_CONTACTS"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "adam-perfumes.com"
+            },
+            {
+              "scheme": "https", 
+              "host": "www.adam-perfumes.com"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#ec4899",
+          "sounds": [
+            "./assets/sounds/notification.wav"
+          ]
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Adam Perfumes to access your camera to scan QR codes and take photos."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Adam Perfumes to use your location to show nearby stores and calculate delivery times."
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow Adam Perfumes to use Face ID for secure authentication."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Adam Perfumes to access your photos to upload product images and profile pictures.",
+          "cameraPermission": "Allow Adam Perfumes to access your camera to take photos."
+        }
+      ],
+      [
+        "@react-native-firebase/app",
+        {
+          "android": {
+            "googleServicesFile": "./google-services.json"
+          },
+          "ios": {
+            "googleServicesPlist": "./GoogleService-Info.plist"
+          }
+        }
+      ]
+    ],
+    "scheme": "adam-perfumes",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "your-eas-project-id"
+      }
+    },
+    "owner": "adam-perfumes-team",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/your-eas-project-id"
+    }
+  }
+}

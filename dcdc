@@ -1,0 +1,437 @@
+Project Overview: Adam-Perfumes E-Commerce Ecosystem
+Adam-Perfumes is a leading perfume brand based in the Sultanate of Oman, operating 21 physical branches across the country. The goal of this project is to design and develop a complete, scalable, and multilingual digital ecosystem to elevate Adam-Perfumes into a modern, customer-focused, and technology-driven retail brand.
+
+This ecosystem includes a fully integrated e-commerce website, mobile applications (iOS & Android) for customers, dedicated admin applications, and a centralized backend system that controls all business operations. The platform utilizes Firebase for mobile backend services and leverages shared hosting (e.g., ChemiCloud) for deploying the website and backend APIs.
+
+Key Components
+Customer Mobile App (Android & iOS)
+A user-friendly app designed for shoppers to browse, purchase, and interact with the brand seamlessly. Key features include bilingual support (Arabic & English), online payments, order tracking, in-app wallet, reward points, chat support, and personalized notifications.
+
+Admin Mobile App (Android & iOS)
+A mobile application specifically for store administrators and managers to control inventory, manage products and orders, send promotions, and monitor sales performance remotely in real-time.
+
+E-Commerce Website
+A responsive and modern web platform that mirrors the mobile app functionality, allowing users to browse and purchase products, manage accounts, and access promotions. It supports seamless login and synchronization between web and mobile platforms.
+
+Backend System (Hosted on ChemiCloud)
+Built with Node.js and Express, the backend serves as the central hub for managing products, users, orders, payments, and analytics. It integrates with Firebase for user authentication, cloud messaging, real-time database management, and storage.
+
+Firebase Integration
+Firebase is used for authentication, database (Firestore), storage, push notifications (FCM), real-time updates, and AI features like automated chat replies using ChatGPT (optional).
+
+Main Features Summary
+Customer-Facing App & Website
+Arabic and English support
+
+WhatsApp, push notification, and SMS-based promotions
+
+Online payments (card, wallet, COD)
+
+Personal account management with purchase history, wallet, saved addresses
+
+Discount coupons and flash sales
+
+Loyalty points and referral system
+
+In-app chat and support
+
+AI-powered chatbot for quick responses
+
+Gift cards, video shopping, and Instagram integration
+
+Real-time delivery ETA
+
+Dark mode support
+
+Admin App & Dashboard
+Product and inventory management
+
+Real-time order tracking and processing
+
+Periodic sales reports and graphical analytics
+
+Promo and coupon management
+
+Customer data access and communication tools
+
+Role-based access control
+
+Real-time notifications for orders and messages
+
+Dark mode for better visibility
+
+E-Commerce Website
+Account sync with mobile app
+
+Full product browsing and purchasing functionality
+
+Integrated with backend and Firebase
+
+Multi-language support
+
+SEO-friendly for improved visibility
+
+
+Main Features of the Android and iOS Applications for Users
+
+A scalable, multilingual ecommerce ecosystem for a perfume brand with 21 branches in Oman.
+Includes mobile apps (user & admin), website, backend, Firebase integration, and deployment via shared hosting (e.g., ChemiCloud).
+
+
+
+1. Bilingual Support (Arabic and English)
+The application supports both Arabic and English, allowing your customers to use it with ease.
+Additional languages can be added based on client preferences.
+
+2. Sending Offers and News to Customers
+You can send offers and updates to customers via:
+
+WhatsApp messages directly
+
+Push notifications
+
+SMS messages to their mobile phones
+
+3. Integrated Online Payment Gateway
+The app supports an online payment gateway that allows customers to pay easily using:
+
+Credit cards
+
+A built-in digital wallet within the app
+
+Cash on delivery option
+
+4. Comprehensive Admin Panel (Website + Apps)
+Admins can manage all store elements, including:
+
+Managing products (add, edit, delete)
+
+Managing orders and customers
+
+App settings configuration
+
+Sending offers and notifications
+
+Full control over all app features
+
+5. Discount Coupons & Flash Sales System
+Admins can:
+
+Create discount coupons with a percentage or fixed amount
+
+Set expiry dates
+
+Apply coupons to specific products or all products
+
+Set limited-time offers on selected or all products
+
+6. Complete Personal Account for Each User
+Each user has a personal account that includes:
+
+Purchase History: Full details of all past orders
+
+Wallet Balance: Display available balance with options to top-up or use it for purchases
+
+Linked Credit Cards: View, edit, or remove saved cards
+
+Points System: View earned points with details on how to use them for discounts or rewards
+
+Saved Addresses: Store multiple addresses (shipping, billing) with options to add, edit, or delete
+
+Chat History: Access previous chats with customer service and start new conversations
+
+7. Multiple Login Options
+Users can log in via:
+
+Social media accounts (Google, Apple, Facebook)
+
+Verification code via SMS
+
+Fingerprint or face recognition
+
+Email and password
+
+8. AI-Powered Auto Replies (ChatGPT)
+Enhance the user experience with automated responses to customer inquiries using AI (ChatGPT).
+Note: ChatGPT services may be subject to additional charges.
+
+9. Wallet System
+Users can pre-load money into an in-app wallet and use it for future purchases.
+
+10. Prepaid Gift Cards
+Users can buy and send prepaid gift cards to friends to be used within the app.
+
+11. Points and Rewards System
+For every order (e.g., for every 10 Riyals spent), users earn points.
+These points can be accumulated and used for discounts on future orders.
+
+12. Video Shopping
+Upload short videos to showcase products, allowing customers to buy directly from the video – similar to TikTok.
+
+13. Instagram Integration
+Display the latest Instagram posts within the app.
+
+14. Shipment Arrival Time
+Show estimated delivery time based on the customer’s location.
+
+15. In-App Chat
+Customers can chat directly with customer support inside the app.
+
+16. Dark Mode
+A comfortable dark mode is available and can be enabled based on user preference.
+
+17. Geolocation-Based Notifications
+- Send notifications with special offers when a customer is physically near one of the Adam-Perfumes branches.
+- This requires user permission for location access (geofencing).
+
+Main Features of the Android and iOS Applications for Admins
+Dedicated management apps for remote store control via smartphones
+
+Easy product addition, editing, and deletion
+
+Real-time sales tracking with detailed periodic reports
+
+Full control over available offers and discounts
+
+Ability to send promotional notifications or direct messages to customers
+
+Access customer data and communicate with them directly
+
+Real-time inventory management
+
+View and manage both open and completed orders
+
+Support for "Dark Mode"
+
+Instant notifications upon receiving new orders or messages
+
+View graphical sales performance reports
+
+Send offers and updates to customers via WhatsApp or push notifications
+
+E-Commerce Website
+Browse and shop products online with ease
+
+Use the same account to switch between the website and the app without logging in again
+
+Synchronization of data between website and app
+
+Improve online brand presence
+
+Reach a wider audience
+
+Includes all the features available in the mobile apps
+
+
+adam-perfumes/
+├── apps/                                      # All frontend applications for users and admins
+│
+│   ├── mobile-user-app/                       # Customer-facing mobile app (React Native)
+│   │   ├── android/                           # Android native project files
+│   │   ├── ios/                               # iOS native project files
+│   │   ├── assets/                            # Fonts, icons, images
+│   │   │   ├── fonts/
+│   │   │   └── images/
+│   │   └── src/                               # Main app logic
+│   │       ├── api/                           # REST or Firebase API calls
+│   │       ├── components/                    # Reusable UI components
+│   │       ├── constants/                     # Static values (colors, configs, etc.)
+│   │       ├── contexts/                      # Context API for state sharing
+│   │       ├── hooks/                         # Custom reusable logic (useAuth, useCart, etc.)
+│   │       ├── localization/                  # i18n translations (Arabic / English)
+│   │       ├── navigation/                    # Navigation structure (React Navigation)
+│   │       ├── screens/                       # Screens/views shown to users
+│   │       │   ├── Auth/                      # Login, register, forgot password
+│   │       │   ├── Home/                      # Homepage
+│   │       │   ├── Product/                   # Product listing/detail
+│   │       │   ├── Cart/                      # Cart and checkout
+│   │       │   ├── Wallet/                    # In-app wallet, balance
+│   │       │   ├── Orders/                    # Order history, tracking
+│   │       │   ├── Video/                     # Video shopping
+│   │       │   ├── Support/                   # Live chat or support
+│   │       │   └── Profile/                   # User settings, saved addresses
+│   │       ├── services/                      # Firebase, notifications, analytics
+│   │       ├── store/                         # Redux/Zustand/Vault state
+│   │       ├── themes/                        # Light/Dark mode styles
+│   │       └── utils/                         # Helper functions (formatters, validators)
+│   ├── mobile-admin-app/                      # Admin mobile app for basic shop management
+│   │   ├── android/
+│   │   ├── ios/
+│   │   ├── assets/
+│   │   └── src/
+│   │       ├── api/
+│   │       ├── components/
+│   │       ├── constants/
+│   │       ├── contexts/
+│   │       ├── navigation/
+│   │       ├── screens/
+│   │       │   ├── Dashboard/                 # Sales overview, metrics
+│   │       │   ├── Orders/                    # Order management
+│   │       │   ├── Products/                  # Add/edit/delete products
+│   │       │   ├── Offers/                    # Coupons, discounts
+│   │       │   └── Branches/                  # Branch inventory control
+│   │       ├── services/
+│   │       ├── store/
+│   │       └── utils/
+│   ├── web-user-app/                          # Customer-facing website (React,Next.js)
+│   │   ├── public/                            # Static files (icons, robots.txt)
+│   │   ├── src/
+│   │   │   ├── assets/
+│   │   │   ├── components/
+│   │   │   ├── hooks/
+│   │   │   ├── i18n/                          # Arabic/English language files
+│   │   │   ├── layouts/                       # Shared page layouts
+│   │   │   ├── pages/                         # Pages accessible by customers
+│   │   │   │   ├── Home/
+│   │   │   │   ├── Product/
+│   │   │   │   ├── Cart/
+│   │   │   │   ├── Wallet/
+│   │   │   │   ├── Orders/
+│   │   │   │   └── Profile/
+│   │   │   ├── services/
+│   │   │   ├── store/
+│   │   │   ├── themes/
+│   │   │   └── utils/
+│   └── web-admin-dashboard/                   # Full-featured admin dashboard (React + Tailwind)
+│       ├── public/
+│       ├── src/
+│       │   ├── assets/
+│       │   ├── components/
+│       │   ├── hooks/
+│       │   ├── i18n/
+│       │   ├── layouts/
+│       │   ├── pages/
+│       │   │   ├── Dashboard/                 # Graphs, stats, alerts
+│       │   │   ├── Products/                  # Manage products
+│       │   │   ├── Orders/                    # View/filter orders
+│       │   │   ├── Offers/                    # Promo manager
+│       │   │   ├── Users/                     # Customers & admins
+│       │   │   └── Branches/                  # Stock by branch
+│       │   ├── services/
+│       │   ├── store/
+│       │   ├── themes/
+│       │   └── utils/
+├── backend/                                   # Central backend (Node.js + Firebase)
+│   ├── controllers/                           # Handle logic for each route
+│   ├── routes/                                # API route definitions
+│   ├── models/                                # DB schema/models (SQL)
+│   ├── middlewares/                           # Auth, error handling, logging
+│   ├── services/                              # Business logic, Firebase SDK wrappers
+│   ├── utils/                                 # Helpers (e.g., formatters, validators)
+│   └── firebase/                              # Firebase admin SDK, config files
+├── database/                                  # Database for web backend (e.g. MySQL via ChemiCloud)
+│   ├── config/                                # DB connection & settings
+│   ├── seed/                                  # Seed scripts to populate initial data
+│   └── migrations/                            # DB migrations
+├── integrations/                              # 3rd-party service connectors
+│   ├── payment-gateways/                      # Stripe, Tap Payments, PayPal, etc.
+│   ├── whatsapp-business/                     # Offer/customer comms via WhatsApp
+│   ├── firebase-functions/                    # Cloud functions for mobile push, chat triggers, etc.
+│   └── chatgpt-ai/                            # AI-based response assistant for customer questions (api)
+├── scripts/                                   # Utility scripts (build, deploy, sync)
+
+ integrations/
+💳 payment-gateways/: Tap Payments or Stripe
+
+📲 whatsapp-business/: Offers, order notifications
+
+🔔 firebase-functions/: Background logic (push, chat triggers)
+
+🧠 chatgpt-ai/: AI auto-reply for FAQs or product help
+
+
+
+
+roject name
+Adamperfumes
+Project ID 
+adamperfumes-om
+Project number 
+326861616985
+Web API Key 
+AIzaSyDc1sGwWQlUIyrkfHUMghq9vhQJqYsoqeU
+
+App ID 
+1:326861616985:android:f632bbf9a80193612efe48
+App nickname
+Add a nickname
+Package name
+com.adamperfumes.admin
+
+App ID 
+1:326861616985:android:a724fc4c4fd3356f2efe48
+App nickname
+Add a nickname
+Package name
+com.adamperfumes.customer
+
+
+
+App ID 
+1:326861616985:ios:9e0b1d47197a183a2efe48
+Encoded App ID 
+app-1-326861616985-ios-9e0b1d47197a183a2efe48
+App nickname
+Add a nickname
+Bundle ID
+com.adamperfumes.admin
+
+
+App ID 
+1:326861616985:ios:a9bd2ac107c03fd12efe48
+Encoded App ID 
+app-1-326861616985-ios-a9bd2ac107c03fd12efe48
+App nickname
+Add a nickname
+Bundle ID
+com.adamperfumes.customer
+
+
+<key>CLIENT_ID</key>
+	<string>326861616985-btlbnmq72umkqnm2ca5n2dgbgbq3l5bh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.326861616985-btlbnmq72umkqnm2ca5n2dgbgbq3l5bh</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAogQOGoje18ztqfqnoZDxj-ttCbr8Ji58</string>
+	<key>GCM_SENDER_ID</key>
+	<string>326861616985</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.adamperfumes.admin</string>
+	<key>PROJECT_ID</key>
+	<string>adamperfumes-om</string>
+	<key>STORAGE_BUCKET</key>
+	<string>adamperfumes-om.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+
+
+
+    Sender ID
+Service Account
+326861616985	Manage Service Accounts
+
+
+Key pair	Date added	Status	Actions
+BNQ5rc8EMMbLT3rY_GBDi9sUui8aIHSErw0B-mGGn-_DLWUI9LIDOaIIXnVtm0uizJtKiXChUF5RaWSUA-YzIpw	Jun 29, 2025	
+
+
+ByX2SEPPKhcAzRadNFuAt1EM9Z3wcEOWkosVKRw3wko
+
+
+
+{
+  "type": "service_account",
+  "project_id": "adamperfumes-om",
+  "private_key_id": "13e3a87b725239917d35b2eafa572b6e9579d173",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDiXjLOmeH2QiBa\nMwtA6hb03E0GcjAjyjWXARGU9edq7lHXC0rPz5bTdBWyG7MxIb0bDIciFgWEDBKm\nUDUDmsyYrXO+UZjAUgTUHc55dHdsHLcfb2u1nWvArj+v6KIPQAMBGrcijfuzIK50\nQ9UOONb7ToAidtWb1deHvVbOWrK5kKwCpCFu5jyQGYicj3Oc0ToJVlGoqYkkifPE\nhr7xW/MJic4NY1GZOEEXz7SLOt7rIzkYKNDyRt1neefp9zD44qtAc8iXpS0e3Muw\nmbQcPVqdxW1wUtZGN5QFGvox/QDARNV146JP4E86m5IlZMf3YRVi8LjZWHTheUOa\nOMtJ6IK5AgMBAAECggEAMKschM9QZePrNUFetMbvhxcbR1zDDVrTAUOFTm+9IMAa\n399pZvsEfDNr27Z5ZQGSOQ/NOO6fond/BfteHoeIX/YA2cUM0KKBr8I1y2aXK2sU\nEwHfWDV/fnZoMm+TcjBqxPDDuX3pxOYso8oWsz9Ut0S2J1LB08aa13AFiwm0fdEd\nqZLzcpBwdpOpLxN/9jh90B0h1mmTXS9N+TcovCXF7fDn14eSOZP6fPGmhSbqzr3f\nHLVszGIzBH7HHtU9y9iUplAfC7jKb1k3/tOIBZlGo/7b/0hrR64S9tD6tNAjQ28q\nQ1Yf+UJkAL1D9naf1f+Ll79PQmDWlUmuF4VaetHUBQKBgQDzLPJGVCswAfmMUBon\nw0u1vUx4eDkrI6yTvfWRmcSE563D5fAOq2CDn7f/7cKTU4/h7CMZgnfTc6Fc0BuT\nihR9l2L2/6j/9aUsRwNi3WORoNjkHfBax5fCL8OHak+F24u5LanCYM/EYMPkkole\njVFD57IG1MUXz5vdpeVp0Dq/dQKBgQDuTlYwveZ53JaagacJYo3xHasujIqpRWhA\nwKpjDnsgbi4Ai0nJeU9rgxKv5j/4BdQRm4W1qOKq08uv3iBocnR4lJ3XY0WY7hW1\nlh4vUofuZrlmqsyTpeFUFNnW4jTl9IIjSBQGIFceOR5F4HZvNAx5PrDVu+Ge9LVj\nf3wHR1rxtQKBgC8RWw+LyRQwvamP85AQt/3EVyHWO1KDRCsQkJCPD7+dzD9nqTBd\nsX+okYfC8G9ttCLJfv24CBNwhSIe0ceb6V1pyOkAESkB1eedEyW2rkgItxJoTRZ1\nHYWjkxgJ1ryVAxVjpkEOVgivphr+1gHsHnejSA0Ub9WtBIFBVAdIG6blAoGAAY9X\ntxf3I0MTZU2F92TCwxpLnZFj8vm2Vf4s31sf6TVvbad7wyrdHzoLbEVYk9oN6lOX\nS3ogibe7NJqCocxmAMgQRHGs6fRdBgRGjE7A/wmDGy3xCuJiGDfOuT5f1EWGeI6n\nOucJSvRaw2BVxiKUFlMXuz5wmqbFbTJPcIjCCqUCgYEAsUoA7JxCd7oPAxiFvZG4\nQXx0h7fn4fdnqkw0Pehdz/FM2eDn+m1Wf/xdZCBmbihW5KwOqzQzcymoq+Xo+bt1\n793HpVONOSz7hZoJem88SlPoLSclsr95R4TBNnOSR9qpBFD8u9xvPNn6vHbwIYcq\nRNH0lA7al4PYLNZV667xgXc=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@adamperfumes-om.iam.gserviceaccount.com",
+  "client_id": "109240582258074959059",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40adamperfumes-om.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+
+

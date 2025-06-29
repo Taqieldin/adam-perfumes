@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "326861616985",
+    "project_id": "adamperfumes-om",
+    "storage_bucket": "adamperfumes-om.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:326861616985:android:f632bbf9a80193612efe48",
+        "android_client_info": {
+          "package_name": "com.adamperfumes.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "326861616985-dp9j6jkkukppguml9r1r33so4liqto3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc1sGwWQlUIyrkfHUMghq9vhQJqYsoqeU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "326861616985-dp9j6jkkukppguml9r1r33so4liqto3m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "326861616985-btlbnmq72umkqnm2ca5n2dgbgbq3l5bh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.adamperfumes.admin"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

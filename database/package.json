@@ -1,0 +1,25 @@
+{
+  "name": "adam-perfumes-database",
+  "version": "1.0.0",
+  "description": "Database configuration and migrations for Adam-Perfumes",
+  "private": true,
+  "scripts": {
+    "migrate": "node scripts/migrate.js",
+    "seed": "node scripts/seed.js",
+    "rollback": "node scripts/rollback.js",
+    "reset": "node scripts/reset.js",
+    "backup": "node scripts/backup.js",
+    "restore": "node scripts/restore.js"
+  },
+  "dependencies": {
+    "mysql2": "^3.6.0",
+    "sequelize": "^6.32.1",
+    "dotenv": "^16.3.1",
+    "bcryptjs": "^2.4.3",
+    "uuid": "^9.0.0",
+    "faker": "^6.6.6"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.1"
+  }
+}

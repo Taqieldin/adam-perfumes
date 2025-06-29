@@ -1,0 +1,78 @@
+{
+  "walletBalance": "Wallet Balance",
+  "topUp": "Top Up",
+  "settings": "Settings",
+  "topUpWallet": "Top Up Wallet",
+  "amount": "Amount",
+  "paymentMethod": "Payment Method",
+  "creditCard": "Credit Card",
+  "applePay": "Apple Pay",
+  "googlePay": "Google Pay",
+  "bankTransfer": "Bank Transfer",
+  "cancel": "Cancel",
+  "recentTransactions": "Recent Transactions",
+  "noTransactions": "No transactions yet",
+  "balance": "Balance",
+  "sendMoney": "Send Money",
+  "sendMoneyDescription": "Transfer money to friends and family",
+  "payBills": "Pay Bills",
+  "payBillsDescription": "Pay your bills directly from wallet",
+  "autoTopUp": "Auto Top-Up",
+  "autoTopUpDescription": "Automatically add money when balance is low",
+  "success": {
+    "topUpCompleted": "Wallet topped up successfully!",
+    "transferCompleted": "Money transferred successfully!",
+    "settingsUpdated": "Settings updated successfully!"
+  },
+  "error": {
+    "fetchFailed": "Failed to load wallet data",
+    "invalidAmount": "Please enter a valid amount",
+    "topUpFailed": "Failed to top up wallet",
+    "transferFailed": "Failed to transfer money",
+    "insufficientBalance": "Insufficient wallet balance"
+  },
+  "transaction": {
+    "types": {
+      "top_up": "Wallet Top-up",
+      "purchase": "Purchase",
+      "refund": "Refund",
+      "transfer_sent": "Money Sent",
+      "transfer_received": "Money Received",
+      "gift_card": "Gift Card",
+      "loyalty_points": "Loyalty Points",
+      "admin_adjustment": "Admin Adjustment"
+    },
+    "status": {
+      "pending": "Pending",
+      "completed": "Completed",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    }
+  },
+  "settings": {
+    "title": "Wallet Settings",
+    "autoTopUp": {
+      "title": "Auto Top-Up",
+      "description": "Automatically add money when balance falls below threshold",
+      "enabled": "Enable Auto Top-Up",
+      "threshold": "Top-up when balance falls below",
+      "amount": "Top-up amount"
+    },
+    "limits": {
+      "title": "Spending Limits",
+      "daily": "Daily spending limit",
+      "monthly": "Monthly spending limit"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "enabled": "Enable wallet notifications",
+      "lowBalance": "Low balance alerts",
+      "threshold": "Alert when balance falls below"
+    },
+    "security": {
+      "title": "Security",
+      "requirePin": "Require PIN for transactions",
+      "biometric": "Use biometric authentication"
+    }
+  }
+}
