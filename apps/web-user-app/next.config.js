@@ -3,19 +3,39 @@ const { i18n } = require('./next-i18next.config');
 
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   i18n,
   
-  // Image optimization
+  // Image optimization - Updated for Next.js 15
   images: {
-    domains: [
-      'localhost',
-      'adam-perfumes.com',
-      'storage.googleapis.com',
-      'firebasestorage.googleapis.com',
-      'lh3.googleusercontent.com',
-      'graph.facebook.com',
-      'platform-lookaside.fbsbx.com'
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: 'adam-perfumes.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'graph.facebook.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'platform-lookaside.fbsbx.com',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -75,23 +95,43 @@ const nextConfig = {
     ];
   },
 
-  // Webpack configuration
+  // Webpack configuration - Updated for Next.js 15
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Add custom webpack configurations here
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+    }
+
+    // Optimize for Next.js 15
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
+        ...config.optimization.splitChunks,
+        cacheGroups: {
+          ...config.optimization.splitChunks?.cacheGroups,
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+        },
+      },
     };
 
     return config;
   },
 
-  // Experimental features
+  // Experimental features - Updated for Next.js 15
   experimental: {
-    // Enable app directory (Next.js 13+)
-    appDir: false,
-    // Server components
-    serverComponentsExternalPackages: ['@prisma/client'],
+    // Enable optimized package imports
+    optimizePackageImports: ['lucide-react', 'date-fns'],
+    // Enable React compiler (if available)
+    reactCompiler: false,
   },
 
   // Output configuration for static export
@@ -109,6 +149,13 @@ const nextConfig = {
   
   // Page extensions
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+  
+  // Logging configuration for Next.js 15
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   
   // TypeScript configuration
   typescript: {

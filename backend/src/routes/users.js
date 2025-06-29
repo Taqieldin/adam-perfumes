@@ -1,34 +1,37 @@
 const express = require('express');
 const router = express.Router();
-const { catchAsync } = require('../middlewares/errorHandler');
-const logger = require('../utils/logger');
+const userController = require('../controllers/userController');
+const { authenticateJWT } = require('../middlewares/auth');
 
-// @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private
-const getProfile = catchAsync(async (req, res, next) => {
-  // TODO: Implement user profile retrieval
-  res.status(200).json({
-    status: 'success',
-    message: 'User profile endpoint - Coming soon',
-    data: null
-  });
-});
+// All routes in this file are protected and require authentication
+router.use(authenticateJWT);
 
-// @desc    Update user profile
-// @route   PUT /api/users/profile
-// @access  Private
-const updateProfile = catchAsync(async (req, res, next) => {
-  // TODO: Implement user profile update
-  res.status(200).json({
-    status: 'success',
-    message: 'Update profile endpoint - Coming soon',
-    data: null
-  });
-});
+// Profile routes
+router.route('/me')
+  .get(userController.getProfile)
+  .patch(userController.updateProfile);
 
-// Routes
-router.get('/profile', getProfile);
-router.put('/profile', updateProfile);
+// Theme preference route
+router.patch('/me/theme', userController.updateThemePreference);
+
+// Address routes
+router.route('/me/addresses')
+  .get(userController.getAddresses)
+  .post(userController.addAddress);
+
+router.route('/me/addresses/:id')
+  .put(userController.updateAddress)
+  .delete(userController.deleteAddress);
+
+// Order routes
+router.get('/me/orders', userController.getOrders);
+
+// Loyalty points routes
+router.get('/me/loyalty-points', userController.getLoyaltyPoints);
+
+// Preferences routes
+router.route('/me/preferences')
+  .get(userController.getPreferences)
+  .put(userController.updatePreferences);
 
 module.exports = router;

@@ -79,7 +79,7 @@
     "react-native-paper": "^5.10.6",
     "react-native-elements": "^3.4.3",
     "react-native-ui-lib": "^7.14.0",
-    "react-native-super-grid": "^4.9.6",
+    "react-native-super-grid": "^6.0.1",
     "react-native-image-viewing": "^0.2.2",
     "react-native-image-crop-picker": "^0.40.2",
     "react-native-webview": "13.2.2",

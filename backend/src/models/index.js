@@ -8,8 +8,6 @@ const Order = require('./Order');
 const OrderItem = require('./OrderItem');
 const Cart = require('./Cart');
 const CartItem = require('./CartItem');
-const Wallet = require('./Wallet');
-const WalletTransaction = require('./WalletTransaction');
 const Address = require('./Address');
 const Coupon = require('./Coupon');
 const Review = require('./Review');
@@ -17,24 +15,32 @@ const Notification = require('./Notification');
 const Branch = require('./Branch');
 const LoyaltyPoints = require('./LoyaltyPoints');
 const ChatMessage = require('./ChatMessage');
+const Inventory = require('./Inventory');
+const GiftCard = require('./GiftCard');
+const WishList = require('./WishList');
+const Offer = require('./Offer');
 
 // Define associations
 const defineAssociations = () => {
   // User associations
   User.hasMany(Order, { foreignKey: 'userId', as: 'orders' });
   User.hasOne(Cart, { foreignKey: 'userId', as: 'cart' });
-  User.hasOne(Wallet, { foreignKey: 'userId', as: 'wallet' });
   User.hasMany(Address, { foreignKey: 'userId', as: 'addresses' });
   User.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
   User.hasMany(Notification, { foreignKey: 'userId', as: 'notifications' });
   User.hasMany(LoyaltyPoints, { foreignKey: 'userId', as: 'loyaltyPoints' });
   User.hasMany(ChatMessage, { foreignKey: 'userId', as: 'messages' });
+  User.hasMany(GiftCard, { foreignKey: 'purchasedBy', as: 'purchasedGiftCards' });
+  User.hasMany(GiftCard, { foreignKey: 'usedBy', as: 'usedGiftCards' });
+  User.hasMany(WishList, { foreignKey: 'userId', as: 'wishlist' });
 
   // Product associations
   Product.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
   Product.hasMany(OrderItem, { foreignKey: 'productId', as: 'orderItems' });
   Product.hasMany(CartItem, { foreignKey: 'productId', as: 'cartItems' });
   Product.hasMany(Review, { foreignKey: 'productId', as: 'reviews' });
+  Product.hasMany(Inventory, { foreignKey: 'productId', as: 'inventory' });
+  Product.hasMany(WishList, { foreignKey: 'productId', as: 'wishlists' });
 
   // Category associations
   Category.hasMany(Product, { foreignKey: 'categoryId', as: 'products' });
@@ -60,14 +66,6 @@ const defineAssociations = () => {
   CartItem.belongsTo(Cart, { foreignKey: 'cartId', as: 'cart' });
   CartItem.belongsTo(Product, { foreignKey: 'productId', as: 'product' });
 
-  // Wallet associations
-  Wallet.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-  Wallet.hasMany(WalletTransaction, { foreignKey: 'walletId', as: 'transactions' });
-
-  // WalletTransaction associations
-  WalletTransaction.belongsTo(Wallet, { foreignKey: 'walletId', as: 'wallet' });
-  WalletTransaction.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
-
   // Address associations
   Address.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
@@ -89,7 +87,24 @@ const defineAssociations = () => {
   ChatMessage.belongsTo(User, { foreignKey: 'userId', as: 'user' });
   ChatMessage.belongsTo(ChatMessage, { foreignKey: 'replyToId', as: 'replyTo' });
 
-  // Branch associations - will be added when we create inventory model
+  // Branch associations
+  Branch.hasMany(Inventory, { foreignKey: 'branchId', as: 'inventory' });
+
+  // Inventory associations
+  Inventory.belongsTo(Product, { foreignKey: 'productId', as: 'product' });
+  Inventory.belongsTo(Branch, { foreignKey: 'branchId', as: 'branch' });
+
+  // GiftCard associations
+  GiftCard.belongsTo(User, { foreignKey: 'purchasedBy', as: 'purchaser' });
+  GiftCard.belongsTo(User, { foreignKey: 'usedBy', as: 'user' });
+
+  // WishList associations
+  WishList.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+  WishList.belongsTo(Product, { foreignKey: 'productId', as: 'product' });
+
+  // Offer associations
+  Offer.belongsTo(User, { foreignKey: 'createdBy', as: 'creator' });
+  Offer.belongsTo(User, { foreignKey: 'approvedBy', as: 'approver' });
 };
 
 // Initialize associations
@@ -104,13 +119,15 @@ module.exports = {
   OrderItem,
   Cart,
   CartItem,
-  Wallet,
-  WalletTransaction,
   Address,
   Coupon,
   Review,
   Notification,
   Branch,
   LoyaltyPoints,
-  ChatMessage
+  ChatMessage,
+  Inventory,
+  GiftCard,
+  WishList,
+  Offer
 };

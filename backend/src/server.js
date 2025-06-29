@@ -26,6 +26,7 @@ const adminRoutes = require('./routes/admin');
 const chatRoutes = require('./routes/chat');
 const notificationRoutes = require('./routes/notifications');
 const analyticsRoutes = require('./routes/analytics');
+const instagramRoutes = require('./routes/instagram');
 
 const app = express();
 const server = createServer(app);
@@ -109,6 +110,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/instagram', instagramRoutes);
 
 // Socket.IO for real-time features
 io.on('connection', (socket) => {

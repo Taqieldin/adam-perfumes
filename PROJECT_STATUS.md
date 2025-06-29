@@ -330,3 +330,87 @@ The project foundation is now complete with all necessary configurations, struct
 *Last Updated: [Current Date]*
 *Project Manager: [Name]*
 *Lead Developer: [Name]*
+
+
+
+# Plan to Complete web-user-app
+
+## Notes
+- Project is a pnpm monorepo with Next.js app in `apps/web-user-app`.
+- No `pnpm-workspace.yaml` found, but monorepo works via root `package.json`.
+- `web-user-app` structure: has `pages` (Cart, Home, Orders, Product, Profile, Wallet), but `services` directory is empty.
+- Dependencies are installed and up to date.
+- Need to avoid duplicate modules; integrate with existing core/features as per user rules.
+- Backend API endpoints identified in backend/src/routes (products, orders, users, wallet, etc.).
+- Backend runs on port 3001; API base URL is http://localhost:3001/api
+- Axios and SWR are available in frontend dependencies.
+- Centralized API client (api.js) created in utils.
+- Product service (product.service.js) implemented in services.
+- User service (user.service.js) implemented in services for profile API calls.
+- Order service (order.service.js) implemented in services for order API calls.
+- Profile, Orders, and Wallet pages fully implemented and integrated using respective services.
+- Collapsible sidebar layout and minimalist black/white theme are now enforced across the app.
+- ProductCard component and products listing page being created, as Product page was empty and no reusable UI components were found.
+- Header, Footer, and MainLayout components being created to provide consistent app structure.
+- Product detail page ([id].jsx) being created to complete product browsing flow.
+- Cart functionality is managed client-side using Redux and redux-persist (no backend cart API endpoints found); cart slice and store setup in progress.
+- Cart page UI and Redux connection implemented; users can now add, update, and remove cart items.
+- Backend contains Review.js model; review infrastructure may exist or be partially implemented. Next step: check for review-related endpoints and plan frontend integration for attribution/timestamps.
+- Backend review service (review.service.js), controller, route, and API endpoints for reviews are now implemented and mounted in products routes.
+- Frontend review service integration started in web-user-app/services.
+- Product detail page now displays and allows user-attributed, timestamped reviews (frontend integration complete).
+- Project README.md created in apps/web-user-app; documentation and tracked changes complete.
+- Monorepo includes a shared/types package with TypeScript models for all core entities (product, review, order, user, etc.).
+- TypeScript is now installed and configured in web-user-app; tsconfig.json created and dependencies added.
+- All core frontend services (product, user, order, wallet, review) refactored to use shared types via JSDoc annotations for type safety.
+- Profile and Orders pages migrated to TypeScript using shared types.
+- Order detail page ([id].tsx) migration to TypeScript complete.
+- Wallet page migration to TypeScript complete.
+- ProductCard component and products listing page migrated to TypeScript and shared types.
+- Product detail page ([id].tsx) migration to TypeScript complete.
+- Cart page and CartItem component migrated to TypeScript and shared types.
+- CollapsibleSidebar, MainLayout, and AppLayout migrated to TypeScript.
+- Header and Footer components migrated to TypeScript and minimalist theme.
+
+## Task List
+- [x] Install all dependencies via pnpm
+- [x] Explore `web-user-app` structure and existing pages
+- [x] Check for workspace configuration
+- [x] Check if services layer exists (it's empty)
+- [x] Investigate backend API endpoints and available features
+- [x] Create centralized API client in utils/api.js
+- [x] Implement product service in services/product.service.js
+- [x] Integrate product service with Product page (product listing and UI integration in progress)
+- [x] Create Header, Footer, and MainLayout components for app layout
+- [x] Create product detail page for individual product view
+- [x] Set up Redux cart slice for cart state management
+- [x] Configure Redux store and redux-persist for cart
+- [x] Integrate Redux Provider and PersistGate in _app.jsx
+- [x] Add global Tailwind CSS via globals.css
+- [x] Build Cart page UI and connect cart actions
+- [x] Implement user service for profile API integration
+- [x] Build and integrate Profile page using user service
+- [x] Implement order service for orders API integration
+- [x] Build and integrate Orders page and order detail view
+- [x] Plan and implement frontend service integrations for wallet feature
+- [x] Ensure UI follows design rules (minimalist, black/white theme, collapsible sidebar, accessibility, etc.)
+- [x] Investigate backend for review endpoints and implement review service integration if available
+- [x] Continue backend review API/controller/route implementation and then frontend integration
+- [x] Attribute and timestamp user-generated content as required (frontend integration complete)
+- [x] Document all changes and avoid untracked modifications
+- [x] Create/complete project README.md in apps/web-user-app
+- [x] Migrate web-user-app to TypeScript (add tsconfig, install deps)
+- [x] Refactor frontend services/components to use shared types from @shared/types
+- [x] Refactor Profile page to TypeScript using shared types
+- [x] Refactor Orders page to TypeScript using shared types
+- [x] Refactor Order Detail page ([id].tsx) to TypeScript using shared types
+- [x] Refactor Wallet page to TypeScript using shared types
+- [x] Refactor ProductCard component and products page to TypeScript using shared types
+- [x] Refactor Product Detail page ([id].tsx) to TypeScript using shared types
+- [x] Refactor Cart page and CartItem component to TypeScript using shared types
+- [x] Refactor CollapsibleSidebar, MainLayout, and AppLayout to TypeScript
+- [x] Refactor Header and Footer components to TypeScript and enforce minimalist theme
+- [ ] Refactor Home page and any remaining UI components/pages to use shared types and full TypeScript adoption
+
+## Current Goal
+Refactor Home page and any remaining UI/components to TypeScript & shared types

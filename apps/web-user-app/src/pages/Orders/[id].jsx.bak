@@ -1,0 +1,69 @@
+import React from 'react';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { MainLayout } from '../../layouts/MainLayout';
+import orderService from '../../services/order.service';
+import Image from 'next/image';
+
+const fetcher = (url, id) => orderService.getOrderById(id);
+
+const OrderDetailPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const { data, error } = useSWR(id ? [`/orders/${id}`, id] : null, fetcher);
+
+  if (error) return <div>Failed to load order details.</div>;
+  if (!data) return <div>Loading...</div>;
+
+  const { data: order } = data;
+
+  return (
+    <MainLayout>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-4">Order #{order.id.substring(0, 8)}...</h1>
+        <p className="text-gray-600 mb-8">Placed on {new Date(order.createdAt).toLocaleDateString()}</p>
+
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
+          {order.items.map((item) => (
+            <div key={item.id} className="flex items-center justify-between border-b py-4">
+              <div className="flex items-center space-x-4">
+                <div className="relative w-20 h-20">
+                  <Image 
+                    src={item.product.images?.[0] || '/placeholder.png'}
+                    alt={item.product.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-md"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-semibold">{item.product.name}</h3>
+                  <p className="text-gray-500">Qty: {item.quantity}</p>
+                </div>
+              </div>
+              <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+            </div>
+          ))}
+          <div className="mt-6 space-y-2">
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>${order.subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Shipping</span>
+              <span>${order.shippingAmount.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between font-bold text-xl">
+              <span>Total</span>
+              <span>${order.totalAmount.toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </MainLayout>
+  );
+};
+
+export default OrderDetailPage;

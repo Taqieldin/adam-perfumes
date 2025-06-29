@@ -1,33 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const { catchAsync } = require('../middlewares/errorHandler');
-const logger = require('../utils/logger');
+const paymentController = require('../controllers/paymentController');
+const { authenticateJWT } = require('../middlewares/auth');
 
-// @desc    Process payment
-// @route   POST /api/payments/process
+// @desc    Create a payment intent for an order
+// @route   POST /api/payments/create-payment-intent
 // @access  Private
-const processPayment = catchAsync(async (req, res, next) => {
-  // TODO: Implement payment processing with Tap Payments/Stripe
-  res.status(200).json({
-    status: 'success',
-    message: 'Payment processing endpoint - Coming soon',
-    data: null
-  });
-});
+router.post(
+  '/create-payment-intent',
+  authenticateJWT,
+  paymentController.createPaymentIntent
+);
 
-// @desc    Handle payment webhook
+// @desc    Handle Stripe payment webhook
 // @route   POST /api/payments/webhook
-// @access  Public
-const handleWebhook = catchAsync(async (req, res, next) => {
-  // TODO: Implement payment webhook handling
-  res.status(200).json({
-    status: 'success',
-    message: 'Payment webhook endpoint - Coming soon'
-  });
-});
-
-// Routes
-router.post('/process', processPayment);
-router.post('/webhook', handleWebhook);
+// @access  Public (Stripe)
+// Stripe requires the raw body to verify the signature.
+router.post(
+  '/webhook',
+  express.raw({ type: 'application/json' }),
+  paymentController.handleStripeWebhook
+);
 
 module.exports = router;

@@ -5,11 +5,17 @@
   "private": true,
   "scripts": {
     "migrate": "node scripts/migrate.js",
+    "migrate:prod": "NODE_ENV=production node scripts/migrate.js",
     "seed": "node scripts/seed.js",
+    "seed:force": "node scripts/seed.js --force",
+    "seed:prod": "NODE_ENV=production node scripts/seed.js",
     "rollback": "node scripts/rollback.js",
     "reset": "node scripts/reset.js",
     "backup": "node scripts/backup.js",
-    "restore": "node scripts/restore.js"
+    "restore": "node scripts/restore.js",
+    "status": "node scripts/status.js",
+    "setup": "npm run migrate && npm run seed",
+    "fresh": "npm run reset && npm run migrate && npm run seed"
   },
   "dependencies": {
     "mysql2": "^3.6.0",

@@ -2,6 +2,9 @@ const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 const bcrypt = require('bcryptjs');
 
+/**
+ * @type {import('sequelize').ModelCtor<import('sequelize').Model<import('../../../shared/types/user').User, any>>}
+ */
 const User = sequelize.define('User', {
   id: {
     type: DataTypes.UUID,
@@ -11,8 +14,8 @@ const User = sequelize.define('User', {
   firebaseUid: {
     type: DataTypes.STRING,
     unique: true,
-    allowNull: true, // Allow null for admin users created directly
-    comment: 'Firebase Authentication UID'
+    allowNull: true,
+    comment: 'Firebase UID for social login'
   },
   email: {
     type: DataTypes.STRING,
@@ -22,12 +25,11 @@ const User = sequelize.define('User', {
       isEmail: true
     }
   },
-  phone: {
+  password: {
     type: DataTypes.STRING,
-    allowNull: true,
-    unique: true,
+    allowNull: true, // Can be null for social login users
     validate: {
-      is: /^[+]?[\d\s\-()]+$/
+      len: [8, 255]
     }
   },
   firstName: {
@@ -44,6 +46,13 @@ const User = sequelize.define('User', {
       len: [2, 50]
     }
   },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    validate: {
+      is: /^(\+968|968)?[79]\d{7}$/ // Oman phone number format
+    }
+  },
   dateOfBirth: {
     type: DataTypes.DATEONLY,
     allowNull: true
@@ -52,20 +61,21 @@ const User = sequelize.define('User', {
     type: DataTypes.ENUM('male', 'female', 'other'),
     allowNull: true
   },
-  avatar: {
+  profilePicture: {
     type: DataTypes.TEXT,
-    allowNull: true,
-    comment: 'URL to user profile picture'
+    allowNull: true
+  },
+  language: {
+    type: DataTypes.ENUM('en', 'ar'),
+    defaultValue: 'en'
   },
   role: {
-    type: DataTypes.ENUM('customer', 'admin', 'super_admin', 'branch_manager'),
-    defaultValue: 'customer',
-    allowNull: false
+    type: DataTypes.ENUM('customer', 'admin', 'super_admin', 'branch_manager', 'staff'),
+    defaultValue: 'customer'
   },
-  status: {
-    type: DataTypes.ENUM('active', 'inactive', 'suspended', 'pending_verification'),
-    defaultValue: 'pending_verification',
-    allowNull: false
+  isActive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
   },
   emailVerified: {
     type: DataTypes.BOOLEAN,
@@ -75,44 +85,62 @@ const User = sequelize.define('User', {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
-  preferredLanguage: {
-    type: DataTypes.ENUM('en', 'ar'),
-    defaultValue: 'en'
+  twoFactorEnabled: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
-  timezone: {
-    type: DataTypes.STRING,
-    defaultValue: 'Asia/Muscat'
+  lastLoginAt: {
+    type: DataTypes.DATE,
+    allowNull: true
   },
-  // Admin specific fields
-  password: {
-    type: DataTypes.STRING,
-    allowNull: true, // Only for admin users, Firebase handles customer auth
-    validate: {
-      len: [6, 255]
-    }
+  prefersDarkMode: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: false
   },
-  branchId: {
-    type: DataTypes.UUID,
-    allowNull: true,
-    comment: 'For branch managers - which branch they manage'
-  },
-  permissions: {
-    type: DataTypes.JSON,
-    allowNull: true,
-    comment: 'Admin permissions array'
-  },
-  // Customer specific fields
-  loyaltyTier: {
-    type: DataTypes.ENUM('bronze', 'silver', 'gold', 'platinum'),
-    defaultValue: 'bronze'
-  },
-  totalSpent: {
-    type: DataTypes.DECIMAL(10, 2),
-    defaultValue: 0.00
-  },
-  totalOrders: {
+  loginCount: {
     type: DataTypes.INTEGER,
     defaultValue: 0
+  },
+  // Wallet balance stored directly in user table (as per database migration)
+  walletBalance: {
+    type: DataTypes.DECIMAL(10, 3),
+    defaultValue: 0.000,
+    comment: 'User wallet balance in OMR'
+  },
+  loyaltyPoints: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    comment: 'User loyalty points'
+  },
+  fcmTokens: {
+    type: DataTypes.JSON,
+    defaultValue: [],
+    comment: 'Firebase Cloud Messaging tokens for push notifications'
+  },
+  preferences: {
+    type: DataTypes.JSON,
+    defaultValue: {
+      notifications: {
+        email: true,
+        push: true,
+        sms: false,
+        whatsapp: true
+      },
+      marketing: {
+        email: true,
+        push: true,
+        sms: false,
+        whatsapp: true
+      },
+      theme: 'light',
+      currency: 'OMR'
+    }
+  },
+  metadata: {
+    type: DataTypes.JSON,
+    defaultValue: {},
+    comment: 'Additional user metadata'
   },
   referralCode: {
     type: DataTypes.STRING(10),
@@ -122,68 +150,70 @@ const User = sequelize.define('User', {
   referredBy: {
     type: DataTypes.UUID,
     allowNull: true,
-    comment: 'User ID who referred this user'
-  },
-  // Notification preferences
-  notificationPreferences: {
-    type: DataTypes.JSON,
-    defaultValue: {
-      email: true,
-      sms: true,
-      push: true,
-      whatsapp: true,
-      marketing: true,
-      orderUpdates: true,
-      promotions: true
+    references: {
+      model: 'User',
+      key: 'id'
     }
   },
-  // Marketing preferences
-  marketingConsent: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
+  totalSpent: {
+    type: DataTypes.DECIMAL(10, 3),
+    defaultValue: 0.000,
+    comment: 'Total amount spent by user in OMR'
   },
-  // Device tokens for push notifications
-  deviceTokens: {
+  totalOrders: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
+  averageOrderValue: {
+    type: DataTypes.DECIMAL(10, 3),
+    defaultValue: 0.000
+  },
+  lastOrderAt: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  customerSegment: {
+    type: DataTypes.ENUM('new', 'regular', 'vip', 'premium'),
+    defaultValue: 'new'
+  },
+  branchId: {
+    type: DataTypes.UUID,
+    allowNull: true,
+    comment: 'Associated branch for staff members'
+  },
+  permissions: {
     type: DataTypes.JSON,
     defaultValue: [],
-    comment: 'Array of FCM device tokens'
+    comment: 'Specific permissions for admin users'
   },
-  // Last activity tracking
-  lastLoginAt: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  lastActiveAt: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  // Soft delete
   deletedAt: {
     type: DataTypes.DATE,
     allowNull: true
   }
 }, {
   tableName: 'users',
-  timestamps: true,
-  paranoid: true, // Enable soft delete
+  paranoid: true, // Soft delete
   indexes: [
     {
       fields: ['email']
     },
     {
+      fields: ['firebaseUid']
+    },
+    {
       fields: ['phone']
     },
     {
-      fields: ['firebaseUid']
+      fields: ['referralCode']
     },
     {
       fields: ['role']
     },
     {
-      fields: ['status']
+      fields: ['isActive']
     },
     {
-      fields: ['referralCode']
+      fields: ['customerSegment']
     },
     {
       fields: ['branchId']
@@ -191,13 +221,13 @@ const User = sequelize.define('User', {
   ],
   hooks: {
     beforeCreate: async (user) => {
-      // Hash password for admin users
+      // Hash password if provided
       if (user.password) {
         user.password = await bcrypt.hash(user.password, 12);
       }
       
-      // Generate referral code for customers
-      if (user.role === 'customer' && !user.referralCode) {
+      // Generate referral code
+      if (!user.referralCode) {
         user.referralCode = generateReferralCode();
       }
     },
@@ -206,6 +236,13 @@ const User = sequelize.define('User', {
       if (user.changed('password') && user.password) {
         user.password = await bcrypt.hash(user.password, 12);
       }
+    },
+    afterCreate: async (user) => {
+      // Create cart for new user
+      const Cart = require('./Cart');
+      await Cart.create({
+        userId: user.id
+      });
     }
   }
 });
@@ -213,43 +250,47 @@ const User = sequelize.define('User', {
 // Instance methods
 User.prototype.comparePassword = async function(candidatePassword) {
   if (!this.password) return false;
-  return bcrypt.compare(candidatePassword, this.password);
+  return await bcrypt.compare(candidatePassword, this.password);
 };
 
 User.prototype.getFullName = function() {
   return `${this.firstName} ${this.lastName}`;
 };
 
-User.prototype.isAdmin = function() {
-  return ['admin', 'super_admin', 'branch_manager'].includes(this.role);
+User.prototype.updateLoginInfo = async function() {
+  this.lastLoginAt = new Date();
+  this.loginCount += 1;
+  await this.save();
 };
 
-User.prototype.canAccessBranch = function(branchId) {
-  if (this.role === 'super_admin') return true;
-  if (this.role === 'branch_manager') return this.branchId === branchId;
-  return false;
-};
-
-User.prototype.addDeviceToken = function(token) {
-  const tokens = this.deviceTokens || [];
-  if (!tokens.includes(token)) {
-    tokens.push(token);
-    this.deviceTokens = tokens;
+User.prototype.addFCMToken = async function(token) {
+  if (!this.fcmTokens.includes(token)) {
+    this.fcmTokens.push(token);
+    await this.save();
   }
 };
 
-User.prototype.removeDeviceToken = function(token) {
-  const tokens = this.deviceTokens || [];
-  this.deviceTokens = tokens.filter(t => t !== token);
+User.prototype.removeFCMToken = async function(token) {
+  this.fcmTokens = this.fcmTokens.filter(t => t !== token);
+  await this.save();
+};
+
+User.prototype.updateCustomerSegment = async function() {
+  if (this.totalOrders === 0) {
+    this.customerSegment = 'new';
+  } else if (this.totalSpent >= 1000) {
+    this.customerSegment = 'premium';
+  } else if (this.totalSpent >= 500) {
+    this.customerSegment = 'vip';
+  } else {
+    this.customerSegment = 'regular';
+  }
+  await this.save();
 };
 
 // Class methods
 User.findByEmail = function(email) {
-  return this.findOne({ where: { email } });
-};
-
-User.findByPhone = function(phone) {
-  return this.findOne({ where: { phone } });
+  return this.findOne({ where: { email: email.toLowerCase() } });
 };
 
 User.findByFirebaseUid = function(firebaseUid) {
@@ -263,8 +304,8 @@ User.findByReferralCode = function(referralCode) {
 // Helper function to generate referral code
 function generateReferralCode() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let result = 'AP'; // Adam Perfumes prefix
-  for (let i = 0; i < 6; i++) {
+  let result = '';
+  for (let i = 0; i < 8; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return result;

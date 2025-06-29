@@ -26,6 +26,8 @@ adam-perfumes/
 ├── database/                      # Database configs & migrations
 ├── integrations/                  # Third-party services
 └── scripts/                       # Deployment & utility scripts
+├── shared/                        # Shared components, constants, hooks, services, themes, and utils
+├── docs/                          # Documentation
 ```
 
 ## 🚀 Key Features

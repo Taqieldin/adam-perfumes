@@ -1,3 +1,6 @@
+/**
+ * @type {import('sequelize').ModelCtor<import('sequelize').Model<import('../../../shared/types/product').Product, any>>}
+ */
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 
@@ -9,16 +12,15 @@ const Product = sequelize.define('Product', {
   },
   sku: {
     type: DataTypes.STRING(50),
-    allowNull: false,
     unique: true,
-    comment: 'Stock Keeping Unit - unique product identifier'
+    allowNull: false,
+    comment: 'Stock Keeping Unit'
   },
   barcode: {
     type: DataTypes.STRING(50),
-    allowNull: true,
-    unique: true
+    unique: true,
+    allowNull: true
   },
-  // Multi-language support
   name: {
     type: DataTypes.JSON,
     allowNull: false,
@@ -32,9 +34,8 @@ const Product = sequelize.define('Product', {
   shortDescription: {
     type: DataTypes.JSON,
     allowNull: true,
-    comment: 'Short product description for listings'
+    comment: 'Short product description in multiple languages'
   },
-  // Category
   categoryId: {
     type: DataTypes.UUID,
     allowNull: false,
@@ -43,46 +44,29 @@ const Product = sequelize.define('Product', {
       key: 'id'
     }
   },
-  // Brand information
   brand: {
     type: DataTypes.STRING(100),
     allowNull: true
   },
-  // Pricing
   price: {
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.DECIMAL(10, 3),
     allowNull: false,
-    validate: {
-      min: 0
-    }
+    comment: 'Price in OMR'
   },
-  compareAtPrice: {
-    type: DataTypes.DECIMAL(10, 2),
+  comparePrice: {
+    type: DataTypes.DECIMAL(10, 3),
     allowNull: true,
-    comment: 'Original price for showing discounts'
+    comment: 'Original price for discount display'
   },
   costPrice: {
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.DECIMAL(10, 3),
     allowNull: true,
-    comment: 'Cost price for profit calculations'
+    comment: 'Cost price for profit calculation'
   },
-  // Inventory
-  trackInventory: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
+  currency: {
+    type: DataTypes.STRING(3),
+    defaultValue: 'OMR'
   },
-  stockQuantity: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-    validate: {
-      min: 0
-    }
-  },
-  lowStockThreshold: {
-    type: DataTypes.INTEGER,
-    defaultValue: 10
-  },
-  // Product specifications
   weight: {
     type: DataTypes.DECIMAL(8, 2),
     allowNull: true,
@@ -91,24 +75,8 @@ const Product = sequelize.define('Product', {
   dimensions: {
     type: DataTypes.JSON,
     allowNull: true,
-    comment: 'Dimensions object: {length: 0, width: 0, height: 0} in cm'
+    comment: 'Product dimensions: {length: 0, width: 0, height: 0}'
   },
-  // Perfume specific attributes
-  fragrance: {
-    type: DataTypes.JSON,
-    allowNull: true,
-    comment: 'Fragrance details: {type: "eau_de_parfum", concentration: "15%", notes: {top: [], middle: [], base: []}}'
-  },
-  gender: {
-    type: DataTypes.ENUM('men', 'women', 'unisex'),
-    allowNull: true
-  },
-  size: {
-    type: DataTypes.STRING(20),
-    allowNull: true,
-    comment: 'Size like "50ml", "100ml", etc.'
-  },
-  // Media
   images: {
     type: DataTypes.JSON,
     defaultValue: [],
@@ -119,48 +87,112 @@ const Product = sequelize.define('Product', {
     defaultValue: [],
     comment: 'Array of video URLs for video shopping'
   },
-  // SEO
+  tags: {
+    type: DataTypes.JSON,
+    defaultValue: [],
+    comment: 'Product tags for search and filtering'
+  },
+  attributes: {
+    type: DataTypes.JSON,
+    defaultValue: {},
+    comment: 'Product attributes like size, color, fragrance notes, etc.'
+  },
+  variants: {
+    type: DataTypes.JSON,
+    defaultValue: [],
+    comment: 'Product variants with different attributes'
+  },
+  isActive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
+  isDigital: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    comment: 'Digital products like gift cards'
+  },
+  requiresShipping: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
+  trackQuantity: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
+  allowBackorder: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  minQuantity: {
+    type: DataTypes.INTEGER,
+    defaultValue: 1,
+    comment: 'Minimum quantity per order'
+  },
+  maxQuantity: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    comment: 'Maximum quantity per order'
+  },
+  stockQuantity: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    comment: 'Total stock across all branches'
+  },
+  lowStockThreshold: {
+    type: DataTypes.INTEGER,
+    defaultValue: 10
+  },
+  seoTitle: {
+    type: DataTypes.JSON,
+    allowNull: true,
+    comment: 'SEO title in multiple languages'
+  },
+  seoDescription: {
+    type: DataTypes.JSON,
+    allowNull: true,
+    comment: 'SEO description in multiple languages'
+  },
+  seoKeywords: {
+    type: DataTypes.JSON,
+    defaultValue: [],
+    comment: 'SEO keywords'
+  },
   slug: {
-    type: DataTypes.STRING(200),
-    allowNull: true,
-    unique: true
-  },
-  metaTitle: {
     type: DataTypes.JSON,
-    allowNull: true,
-    comment: 'SEO meta title in multiple languages'
-  },
-  metaDescription: {
-    type: DataTypes.JSON,
-    allowNull: true,
-    comment: 'SEO meta description in multiple languages'
-  },
-  // Status and visibility
-  status: {
-    type: DataTypes.ENUM('active', 'inactive', 'draft', 'archived'),
-    defaultValue: 'draft'
-  },
-  visibility: {
-    type: DataTypes.ENUM('visible', 'hidden', 'catalog_only'),
-    defaultValue: 'visible'
+    allowNull: false,
+    comment: 'URL slug in multiple languages'
   },
   featured: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
-  // Shipping
-  requiresShipping: {
+  trending: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true
+    defaultValue: false
   },
-  shippingClass: {
-    type: DataTypes.STRING(50),
+  newArrival: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  bestSeller: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  onSale: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  saleStartDate: {
+    type: DataTypes.DATE,
     allowNull: true
   },
-  // Ratings and reviews
-  averageRating: {
+  saleEndDate: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  rating: {
     type: DataTypes.DECIMAL(3, 2),
-    defaultValue: 0,
+    defaultValue: 0.00,
     validate: {
       min: 0,
       max: 5
@@ -170,75 +202,105 @@ const Product = sequelize.define('Product', {
     type: DataTypes.INTEGER,
     defaultValue: 0
   },
-  // Sales data
-  totalSales: {
+  viewCount: {
     type: DataTypes.INTEGER,
     defaultValue: 0
   },
-  // Tags for filtering
-  tags: {
-    type: DataTypes.JSON,
-    defaultValue: [],
-    comment: 'Array of tags for filtering and search'
+  purchaseCount: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
   },
-  // Variants (for products with multiple options)
-  hasVariants: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
+  wishlistCount: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
   },
-  parentId: {
-    type: DataTypes.UUID,
+  availableFrom: {
+    type: DataTypes.DATE,
     allowNull: true,
-    comment: 'Parent product ID for variants'
+    comment: 'Product availability start date'
   },
-  variantOptions: {
-    type: DataTypes.JSON,
+  availableUntil: {
+    type: DataTypes.DATE,
     allowNull: true,
-    comment: 'Variant options like size, color, etc.'
+    comment: 'Product availability end date'
   },
-  // Promotion and discount eligibility
-  allowDiscounts: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
+  loyaltyPoints: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    comment: 'Points earned when purchasing this product'
   },
-  // Gift card specific
-  isGiftCard: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
+  shippingClass: {
+    type: DataTypes.ENUM('standard', 'express', 'fragile', 'hazardous'),
+    defaultValue: 'standard'
   },
-  giftCardType: {
-    type: DataTypes.ENUM('fixed', 'variable'),
+  taxClass: {
+    type: DataTypes.STRING(50),
+    defaultValue: 'standard'
+  },
+  vendor: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    comment: 'Product vendor/supplier'
+  },
+  manufacturerCode: {
+    type: DataTypes.STRING(50),
     allowNull: true
   },
-  // Digital product
-  isDigital: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
+  originCountry: {
+    type: DataTypes.STRING(50),
+    allowNull: true
   },
-  // Soft delete
+  expiryDate: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: 'Product expiry date for perfumes'
+  },
+  batchNumber: {
+    type: DataTypes.STRING(50),
+    allowNull: true
+  },
+  notes: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+    comment: 'Internal notes about the product'
+  },
+  metadata: {
+    type: DataTypes.JSON,
+    defaultValue: {},
+    comment: 'Additional product metadata'
+  },
+  createdBy: {
+    type: DataTypes.UUID,
+    allowNull: true,
+    references: {
+      model: 'users',
+      key: 'id'
+    }
+  },
+  updatedBy: {
+    type: DataTypes.UUID,
+    allowNull: true,
+    references: {
+      model: 'users',
+      key: 'id'
+    }
+  },
   deletedAt: {
     type: DataTypes.DATE,
     allowNull: true
   }
 }, {
   tableName: 'products',
-  timestamps: true,
-  paranoid: true,
+  paranoid: true, // Soft delete
   indexes: [
     {
       fields: ['sku']
     },
     {
+      fields: ['barcode']
+    },
+    {
       fields: ['categoryId']
-    },
-    {
-      fields: ['status']
-    },
-    {
-      fields: ['visibility']
-    },
-    {
-      fields: ['featured']
     },
     {
       fields: ['brand']
@@ -247,145 +309,167 @@ const Product = sequelize.define('Product', {
       fields: ['price']
     },
     {
+      fields: ['isActive']
+    },
+    {
+      fields: ['featured']
+    },
+    {
+      fields: ['trending']
+    },
+    {
+      fields: ['newArrival']
+    },
+    {
+      fields: ['bestSeller']
+    },
+    {
+      fields: ['onSale']
+    },
+    {
+      fields: ['rating']
+    },
+    {
       fields: ['stockQuantity']
     },
     {
-      fields: ['averageRating']
-    },
-    {
-      fields: ['totalSales']
-    },
-    {
-      fields: ['parentId']
-    },
-    {
-      fields: ['slug']
+      fields: ['createdAt']
     }
   ],
   hooks: {
     beforeCreate: async (product) => {
-      // Generate slug if not provided
-      if (!product.slug && product.name && product.name.en) {
-        product.slug = generateSlug(product.name.en);
+      // Generate SKU if not provided
+      if (!product.sku) {
+        product.sku = await generateSKU();
+      }
+      
+      // Set sale status based on dates
+      if (product.saleStartDate && product.saleEndDate) {
+        const now = new Date();
+        product.onSale = now >= product.saleStartDate && now <= product.saleEndDate;
       }
     },
     beforeUpdate: async (product) => {
-      // Update slug if name changed
-      if (product.changed('name') && product.name && product.name.en && !product.slug) {
-        product.slug = generateSlug(product.name.en);
+      // Update sale status based on dates
+      if (product.changed('saleStartDate') || product.changed('saleEndDate')) {
+        const now = new Date();
+        product.onSale = product.saleStartDate && product.saleEndDate && 
+                        now >= product.saleStartDate && now <= product.saleEndDate;
       }
     }
   }
 });
 
 // Instance methods
-Product.prototype.getName = function(language = 'en') {
-  return this.name && this.name[language] ? this.name[language] : this.name.en || '';
-};
-
-Product.prototype.getDescription = function(language = 'en') {
-  return this.description && this.description[language] ? this.description[language] : this.description?.en || '';
-};
-
-Product.prototype.getShortDescription = function(language = 'en') {
-  return this.shortDescription && this.shortDescription[language] ? this.shortDescription[language] : this.shortDescription?.en || '';
-};
-
-Product.prototype.isInStock = function() {
-  if (!this.trackInventory) return true;
-  return this.stockQuantity > 0;
-};
-
-Product.prototype.isLowStock = function() {
-  if (!this.trackInventory) return false;
-  return this.stockQuantity <= this.lowStockThreshold;
+Product.prototype.getDisplayPrice = function() {
+  return this.onSale && this.comparePrice ? this.price : this.price;
 };
 
 Product.prototype.getDiscountPercentage = function() {
-  if (!this.compareAtPrice || this.compareAtPrice <= this.price) return 0;
-  return Math.round(((this.compareAtPrice - this.price) / this.compareAtPrice) * 100);
+  if (!this.onSale || !this.comparePrice) return 0;
+  return Math.round(((this.comparePrice - this.price) / this.comparePrice) * 100);
 };
 
-Product.prototype.getPrimaryImage = function() {
-  return this.images && this.images.length > 0 ? this.images[0] : null;
+Product.prototype.isInStock = function() {
+  if (!this.trackQuantity) return true;
+  return this.stockQuantity > 0 || this.allowBackorder;
 };
 
-Product.prototype.addImage = function(imageUrl) {
-  const images = this.images || [];
-  if (!images.includes(imageUrl)) {
-    images.push(imageUrl);
-    this.images = images;
+Product.prototype.isAvailable = function() {
+  const now = new Date();
+  const availableFrom = this.availableFrom ? new Date(this.availableFrom) : null;
+  const availableUntil = this.availableUntil ? new Date(this.availableUntil) : null;
+  
+  if (availableFrom && now < availableFrom) return false;
+  if (availableUntil && now > availableUntil) return false;
+  
+  return this.isActive && this.isInStock();
+};
+
+Product.prototype.incrementViewCount = async function() {
+  this.viewCount += 1;
+  await this.save();
+};
+
+Product.prototype.incrementPurchaseCount = async function(quantity = 1) {
+  this.purchaseCount += quantity;
+  await this.save();
+};
+
+Product.prototype.updateRating = async function() {
+  const Review = require('./Review');
+  const reviews = await Review.findAll({
+    where: { productId: this.id },
+    attributes: ['rating']
+  });
+  
+  if (reviews.length > 0) {
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    this.rating = (totalRating / reviews.length).toFixed(2);
+    this.reviewCount = reviews.length;
+  } else {
+    this.rating = 0;
+    this.reviewCount = 0;
   }
-};
-
-Product.prototype.removeImage = function(imageUrl) {
-  const images = this.images || [];
-  this.images = images.filter(img => img !== imageUrl);
-};
-
-Product.prototype.updateRating = function(newRating, isNewReview = true) {
-  if (isNewReview) {
-    const totalRating = (this.averageRating * this.reviewCount) + newRating;
-    this.reviewCount += 1;
-    this.averageRating = totalRating / this.reviewCount;
-  }
+  
+  await this.save();
 };
 
 // Class methods
-Product.findBySku = function(sku) {
+Product.findBySKU = function(sku) {
   return this.findOne({ where: { sku } });
 };
 
-Product.findBySlug = function(slug) {
-  return this.findOne({ where: { slug } });
+Product.findByBarcode = function(barcode) {
+  return this.findOne({ where: { barcode } });
 };
 
 Product.findFeatured = function(limit = 10) {
   return this.findAll({
-    where: { featured: true, status: 'active', visibility: 'visible' },
+    where: { featured: true, isActive: true },
     limit,
     order: [['createdAt', 'DESC']]
   });
 };
 
-Product.findByCategory = function(categoryId, options = {}) {
+Product.findTrending = function(limit = 10) {
   return this.findAll({
-    where: { 
-      categoryId, 
-      status: 'active', 
-      visibility: 'visible' 
-    },
-    ...options
+    where: { trending: true, isActive: true },
+    limit,
+    order: [['viewCount', 'DESC']]
   });
 };
 
-Product.searchProducts = function(query, options = {}) {
-  const { Op } = require('sequelize');
+Product.findNewArrivals = function(limit = 10) {
   return this.findAll({
-    where: {
-      [Op.or]: [
-        { '$name.en$': { [Op.like]: `%${query}%` } },
-        { '$name.ar$': { [Op.like]: `%${query}%` } },
-        { '$description.en$': { [Op.like]: `%${query}%` } },
-        { '$description.ar$': { [Op.like]: `%${query}%` } },
-        { brand: { [Op.like]: `%${query}%` } },
-        { sku: { [Op.like]: `%${query}%` } }
-      ],
-      status: 'active',
-      visibility: 'visible'
-    },
-    ...options
+    where: { newArrival: true, isActive: true },
+    limit,
+    order: [['createdAt', 'DESC']]
   });
 };
 
-// Helper function to generate slug
-function generateSlug(text) {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '') // Remove special characters
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/-+/g, '-') // Replace multiple hyphens with single
-    .trim();
+Product.findBestSellers = function(limit = 10) {
+  return this.findAll({
+    where: { bestSeller: true, isActive: true },
+    limit,
+    order: [['purchaseCount', 'DESC']]
+  });
+};
+
+Product.findOnSale = function(limit = 10) {
+  return this.findAll({
+    where: { onSale: true, isActive: true },
+    limit,
+    order: [['createdAt', 'DESC']]
+  });
+};
+
+// Helper function to generate SKU
+async function generateSKU() {
+  const prefix = 'AP'; // Adam Perfumes
+  const timestamp = Date.now().toString().slice(-6);
+  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  return `${prefix}${timestamp}${random}`;
 }
 
 module.exports = Product;

@@ -162,7 +162,7 @@ Users can pre-load money into an in-app wallet and use it for future purchases.
 Users can buy and send prepaid gift cards to friends to be used within the app.
 
 11. Points and Rewards System
-For every order (e.g., for every 10 Riyals spent), users earn points.
+For every order (e.g., for every 10 omr spent), users earn points.
 These points can be accumulated and used for discounts on future orders.
 
 12. Video Shopping
@@ -329,6 +329,15 @@ adam-perfumes/
 │   ├── firebase-functions/                    # Cloud functions for mobile push, chat triggers, etc.
 │   └── chatgpt-ai/                            # AI-based response assistant for customer questions (api)
 ├── scripts/                                   # Utility scripts (build, deploy, sync)
+├── shared/
+│   ├── components/             # Reusable UI components (e.g., Button, Modal)
+│   ├── hooks/                  # Shared logic across platforms (e.g., useDebounce)
+│   ├── types/                  # TypeScript types/interfaces used across apps
+│   ├── constants/              # Common constants (e.g., roles, locales)
+│   ├── utils/                  # Reusable helper functions
+│   ├── services/               # Common business logic/services (e.g., auth, API clients)
+│   └── themes/                 # Design tokens, colors, spacing (if shared)
+
 
  integrations/
 💳 payment-gateways/: Tap Payments or Stripe

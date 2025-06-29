@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { catchAsync } = require('../middlewares/errorHandler');
-const logger = require('../utils/logger');
+const { authenticateJWT, requireAdmin } = require('../middlewares/auth');
+const orderController = require('../controllers/orderController');
+
+// Protect all admin routes
+router.use(authenticateJWT, requireAdmin);
 
 // @desc    Get admin dashboard data
 // @route   GET /api/admin/dashboard
@@ -37,5 +41,7 @@ const manageProducts = catchAsync(async (req, res, next) => {
 // Routes
 router.get('/dashboard', getDashboard);
 router.get('/products', manageProducts);
+router.get('/orders', orderController.getAllOrders);
+router.patch('/orders/:id/status', orderController.updateOrderStatus);
 
 module.exports = router;

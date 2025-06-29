@@ -14,7 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "326861616985-dp9j6jkkukppguml9r1r33so4liqto3m.apps.googleusercontent.com",
+          "client_id": "326861616985-btlbnmq72umkqnm2ca5n2dgbgbq3l5bh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,15 +27,8 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "326861616985-dp9j6jkkukppguml9r1r33so4liqto3m.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "326861616985-btlbnmq72umkqnm2ca5n2dgbgbq3l5bh.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.adamperfumes.admin"
-              }
+              "client_type": 3
             }
           ]
         }

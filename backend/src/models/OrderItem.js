@@ -1,3 +1,6 @@
+/**
+ * @type {import('sequelize').ModelCtor<import('sequelize').Model<import('../../../shared/types/order-item').OrderItem, any>>}
+ */
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 
