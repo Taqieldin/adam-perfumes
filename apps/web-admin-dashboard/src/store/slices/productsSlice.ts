@@ -1,12 +1,23 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Product } from '../../../../shared/types/product';
-import { Category } from '../../../../shared/types/category';
-import apiService from '../../services/apiService';
+import { Product } from '../../../../../shared/types/product';
+import { Category } from '../../../../../shared/types/category';
+import { productService, ProductFilters, CreateProductData, UpdateProductData } from '../../services/productService';
 
 interface ProductsState {
   products: Product[];
   categories: Category[];
   currentProduct: Product | null;
+  stats: {
+    totalProducts: number;
+    activeProducts: number;
+    inactiveProducts: number;
+    outOfStock: number;
+    lowStock: number;
+    featuredProducts: number;
+    newArrivals: number;
+    bestSellers: number;
+    onSaleProducts: number;
+  } | null;
   loading: {
     products: boolean;
     categories: boolean;
@@ -14,27 +25,26 @@ interface ProductsState {
     creating: boolean;
     updating: boolean;
     deleting: boolean;
+    bulkDeleting: boolean;
+    duplicating: boolean;
+    stats: boolean;
   };
   error: string | null;
-  filters: {
-    search: string;
-    category: string;
-    status: string;
-    sortBy: string;
-    sortOrder: 'asc' | 'desc';
-  };
+  filters: ProductFilters;
   pagination: {
     page: number;
     limit: number;
     total: number;
     totalPages: number;
   };
+  selectedProducts: string[];
 }
 
 const initialState: ProductsState = {
   products: [],
   categories: [],
   currentProduct: null,
+  stats: null,
   loading: {
     products: false,
     categories: false,
@@ -42,12 +52,14 @@ const initialState: ProductsState = {
     creating: false,
     updating: false,
     deleting: false,
+    bulkDeleting: false,
+    duplicating: false,
+    stats: false,
   },
   error: null,
   filters: {
-    search: '',
-    category: '',
-    status: '',
+    page: 1,
+    limit: 20,
     sortBy: 'createdAt',
     sortOrder: 'desc',
   },
@@ -57,13 +69,14 @@ const initialState: ProductsState = {
     total: 0,
     totalPages: 0,
   },
+  selectedProducts: [],
 };
 
 // Async thunks
 export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
-  async (params: any = {}) => {
-    const response = await apiService.getWithParams('/admin/products', params);
+  async (filters: ProductFilters = {}) => {
+    const response = await productService.getProducts(filters);
     return response;
   }
 );
@@ -71,23 +84,23 @@ export const fetchProducts = createAsyncThunk(
 export const fetchProduct = createAsyncThunk(
   'products/fetchProduct',
   async (id: string) => {
-    const product = await apiService.get<Product>(`/admin/products/${id}`);
+    const product = await productService.getProduct(id);
     return product;
   }
 );
 
 export const createProduct = createAsyncThunk(
   'products/createProduct',
-  async (productData: Partial<Product>) => {
-    const product = await apiService.post<Product>('/admin/products', productData);
+  async (productData: CreateProductData) => {
+    const product = await productService.createProduct(productData);
     return product;
   }
 );
 
 export const updateProduct = createAsyncThunk(
   'products/updateProduct',
-  async ({ id, data }: { id: string; data: Partial<Product> }) => {
-    const product = await apiService.put<Product>(`/admin/products/${id}`, data);
+  async (data: UpdateProductData) => {
+    const product = await productService.updateProduct(data);
     return product;
   }
 );
@@ -95,8 +108,40 @@ export const updateProduct = createAsyncThunk(
 export const deleteProduct = createAsyncThunk(
   'products/deleteProduct',
   async (id: string) => {
-    await apiService.delete(`/admin/products/${id}`);
+    await productService.deleteProduct(id);
     return id;
+  }
+);
+
+export const bulkDeleteProducts = createAsyncThunk(
+  'products/bulkDeleteProducts',
+  async (productIds: string[]) => {
+    await productService.bulkDeleteProducts(productIds);
+    return productIds;
+  }
+);
+
+export const duplicateProduct = createAsyncThunk(
+  'products/duplicateProduct',
+  async (id: string) => {
+    const product = await productService.duplicateProduct(id);
+    return product;
+  }
+);
+
+export const toggleProductStatus = createAsyncThunk(
+  'products/toggleProductStatus',
+  async (id: string) => {
+    const product = await productService.toggleProductStatus(id);
+    return product;
+  }
+);
+
+export const fetchProductStats = createAsyncThunk(
+  'products/fetchProductStats',
+  async () => {
+    const stats = await productService.getProductStats();
+    return stats;
   }
 );
 
@@ -104,7 +149,7 @@ const productsSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    setFilters: (state, action: PayloadAction<Partial<ProductsState['filters']>>) => {
+    setFilters: (state, action: PayloadAction<Partial<ProductFilters>>) => {
       state.filters = { ...state.filters, ...action.payload };
     },
     setPagination: (state, action: PayloadAction<Partial<ProductsState['pagination']>>) => {
@@ -115,6 +160,24 @@ const productsSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
+    },
+    setSelectedProducts: (state, action: PayloadAction<string[]>) => {
+      state.selectedProducts = action.payload;
+    },
+    toggleProductSelection: (state, action: PayloadAction<string>) => {
+      const productId = action.payload;
+      const index = state.selectedProducts.indexOf(productId);
+      if (index > -1) {
+        state.selectedProducts.splice(index, 1);
+      } else {
+        state.selectedProducts.push(productId);
+      }
+    },
+    selectAllProducts: (state) => {
+      state.selectedProducts = state.products.map(p => p.id);
+    },
+    clearSelectedProducts: (state) => {
+      state.selectedProducts = [];
     },
   },
   extraReducers: (builder) => {
@@ -202,8 +265,76 @@ const productsSlice = createSlice({
         state.loading.deleting = false;
         state.error = action.error.message || 'Failed to delete product';
       });
+
+    // Bulk delete products
+    builder
+      .addCase(bulkDeleteProducts.pending, (state) => {
+        state.loading.bulkDeleting = true;
+        state.error = null;
+      })
+      .addCase(bulkDeleteProducts.fulfilled, (state, action) => {
+        state.loading.bulkDeleting = false;
+        state.products = state.products.filter(p => !action.payload.includes(p.id));
+        state.selectedProducts = [];
+      })
+      .addCase(bulkDeleteProducts.rejected, (state, action) => {
+        state.loading.bulkDeleting = false;
+        state.error = action.error.message || 'Failed to delete products';
+      });
+
+    // Duplicate product
+    builder
+      .addCase(duplicateProduct.pending, (state) => {
+        state.loading.duplicating = true;
+        state.error = null;
+      })
+      .addCase(duplicateProduct.fulfilled, (state, action) => {
+        state.loading.duplicating = false;
+        state.products.unshift(action.payload);
+      })
+      .addCase(duplicateProduct.rejected, (state, action) => {
+        state.loading.duplicating = false;
+        state.error = action.error.message || 'Failed to duplicate product';
+      });
+
+    // Toggle product status
+    builder
+      .addCase(toggleProductStatus.fulfilled, (state, action) => {
+        const index = state.products.findIndex(p => p.id === action.payload.id);
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
+        if (state.currentProduct?.id === action.payload.id) {
+          state.currentProduct = action.payload;
+        }
+      });
+
+    // Fetch product stats
+    builder
+      .addCase(fetchProductStats.pending, (state) => {
+        state.loading.stats = true;
+        state.error = null;
+      })
+      .addCase(fetchProductStats.fulfilled, (state, action) => {
+        state.loading.stats = false;
+        state.stats = action.payload;
+      })
+      .addCase(fetchProductStats.rejected, (state, action) => {
+        state.loading.stats = false;
+        state.error = action.error.message || 'Failed to fetch product stats';
+      });
   },
 });
 
-export const { setFilters, setPagination, clearCurrentProduct, clearError } = productsSlice.actions;
+export const { 
+  setFilters, 
+  setPagination, 
+  clearCurrentProduct, 
+  clearError,
+  setSelectedProducts,
+  toggleProductSelection,
+  selectAllProducts,
+  clearSelectedProducts
+} = productsSlice.actions;
+
 export default productsSlice.reducer;

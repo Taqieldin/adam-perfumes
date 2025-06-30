@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import { 
@@ -9,11 +9,16 @@ import {
   DollarSign,
   Eye,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  AlertTriangle,
+  Clock,
+  CheckCircle
 } from 'lucide-react';
 
 import { RootState, AppDispatch } from '../store';
 import { fetchDashboardStats } from '../store/slices/analyticsSlice';
+import { fetchProductStats } from '../store/slices/productsSlice';
+import { analyticsService, productService, orderService, customerService, inventoryService } from '../services';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import StatsCard from '../components/dashboard/StatsCard';
 import RecentOrders from '../components/dashboard/RecentOrders';
@@ -24,10 +29,63 @@ import QuickActions from '../components/dashboard/QuickActions';
 const DashboardPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { stats, loading } = useSelector((state: RootState) => state.analytics);
+  const { stats: productStats } = useSelector((state: RootState) => state.products);
   const { userData } = useSelector((state: RootState) => state.auth);
 
+  const [dashboardData, setDashboardData] = useState<{
+    recentOrders: any[];
+    lowStockProducts: any[];
+    recentActivity: any[];
+    alerts: any[];
+  }>({
+    recentOrders: [],
+    lowStockProducts: [],
+    recentActivity: [],
+    alerts: []
+  });
+
+  const [loadingData, setLoadingData] = useState(true);
+
   useEffect(() => {
-    dispatch(fetchDashboardStats());
+    const loadDashboardData = async () => {
+      try {
+        setLoadingData(true);
+        
+        // Fetch all dashboard data in parallel
+        const [
+          dashboardStats,
+          recentOrders,
+          lowStockProducts,
+          stockAlerts,
+          realTimeStats
+        ] = await Promise.all([
+          analyticsService.getDashboardStats(),
+          orderService.getRecentOrders(5),
+          inventoryService.getLowStockProducts(),
+          inventoryService.getStockAlerts(false),
+          analyticsService.getRealTimeStats()
+        ]);
+
+        // Dispatch Redux actions
+        dispatch(fetchDashboardStats());
+        dispatch(fetchProductStats());
+
+        // Set local state
+        setDashboardData({
+          recentOrders,
+          lowStockProducts,
+          recentActivity: realTimeStats.recentActivity || [],
+          alerts: stockAlerts
+        });
+
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
+    loadDashboardData();
   }, [dispatch]);
 
   if (loading.stats) {
@@ -75,8 +133,7 @@ const DashboardPage: React.FC = () => {
         <title>Dashboard - Adam Perfumes Admin</title>
       </Helmet>
 
-      <div className="space-y-6">
-        {/* Welcome Section */}
+      <div className="space-y-6"{/* Welcome Section */}
         <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg p-6 text-white">
           <h1 className="text-2xl font-bold mb-2">
             Welcome back, {userData?.firstName}! 👋
@@ -85,6 +142,31 @@ const DashboardPage: React.FC = () => {
             Here's what's happening with your store today.
           </p>
         </div>
+
+        {/* Alerts Section */}
+        {dashboardData.alerts.length > 0 && (
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2" />
+              <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                Attention Required ({dashboardData.alerts.length})
+              </h3>
+            </div>
+            <div className="space-y-2">
+              {dashboardData.alerts.slice(0, 3).map((alert, index) => (
+                <div key={index} className="text-sm text-yellow-700 dark:text-yellow-300">
+                  • {alert.productName} is {alert.alertType === 'low_stock' ? 'low on stock' : 'out of stock'}
+                  {alert.branchName && ` at ${alert.branchName}`}
+                </div>
+              ))}
+              {dashboardData.alerts.length > 3 && (
+                <div className="text-sm text-yellow-600 dark:text-yellow-400">
+                  +{dashboardData.alerts.length - 3} more alerts
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
